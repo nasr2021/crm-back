@@ -1,47 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { PrismaClient } from '@prisma/client';
+import { PRISMA_CLIENT } from 'src/prisma.module';
 
 @Injectable()
 export class AuthService {
-  constructor( private readonly clientRepository :PrismaClient) {}
+  constructor( @Inject(PRISMA_CLIENT)private readonly clientRepository :PrismaClient) {}
   create(createAuthDto: CreateAuthDto) {
-    return this.clientRepository.create({
-      data: createAuthDto,
-    });
+    return 
   }
 
   findAll() {
-    return this.clientRepository.findMany({
-      where: { type: 'auth' },
+    return this.clientRepository.user.findMany({
+
     });
   }
 
   findOne(id: number) {
-    const authExists = this.clientRepository.findUnique({
+    const authExists = this.clientRepository.user.findUnique({
       where: { id },
     });
-    return this.clientRepository.findUnique({
+    return this.clientRepository.user.findUnique({
       where: { id },
     });
   }
 
   update(id: number, updateAuthDto: UpdateAuthDto) {
-    const authExists = this.clientRepository.findUnique({
+    const authExists = this.clientRepository.user.findUnique({
       where: { id },
     });
-    return this.clientRepository.update({
+    return this.clientRepository.user.update({
       where: { id },
       data: updateAuthDto,
     });
   }
 
   remove(id: number) {
-    const authExists = this.clientRepository.findUnique({
+    const authExists = this.clientRepository.user.findUnique({
       where: { id },
     });
-    return this.clientRepository.delete({
+    return this.clientRepository.user.delete({
       where: { id },
     });
   }

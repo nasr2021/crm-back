@@ -1,47 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateDealDto } from './dto/create-deal.dto';
 import { UpdateDealDto } from './dto/update-deal.dto';
 import { PrismaClient } from '@prisma/client';
+import { PRISMA_CLIENT } from 'src/prisma.module';
 
 @Injectable()
 export class DealService {
-  constructor( private readonly clientRepository :PrismaClient) {}
+  constructor( @Inject(PRISMA_CLIENT) private readonly clientRepository :PrismaClient) {}
   create(createDealDto: CreateDealDto) {
-    return this.clientRepository.create({
-      data: createDealDto,
-    });
+    return 
   }
 
   findAll() {
-    return this.clientRepository.findMany({
-      where: { type: 'deal' },
-    });
+    return this.clientRepository.deal.findMany(
+    
+    );
   }
 
   findOne(id: number) {
-    const dealExists = this.clientRepository.findUnique({
+    const dealExists = this.clientRepository.deal.findUnique({
       where: { id },
     });
-    return this.clientRepository.findUnique({
+    return this.clientRepository.deal.findUnique({
       where: { id },
     });
   }
 
   update(id: number, updateDealDto: UpdateDealDto) {
-    const dealExists = this.clientRepository.findUnique({
+    const dealExists = this.clientRepository.deal.findUnique({
       where: { id },
     });
-    return this.clientRepository.update({
+    return this.clientRepository.deal.update({
       where: { id },
       data: updateDealDto,
     });
   }
 
   remove(id: number) {
-    const dealExists = this.clientRepository.findUnique({
+    const dealExists = this.clientRepository.deal.findUnique({
       where: { id },
     });
-    return this.clientRepository.delete({
+    return this.clientRepository.deal.delete({
       where: { id },
     });
   }

@@ -1,42 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+
 import { PrismaClient } from '@prisma/client';
+import { PRISMA_CLIENT } from 'src/prisma.module';
 
 @Injectable()
 export class ClientService {
-  constructor(private readonly clientRepository: PrismaClient) {} 
+  constructor(@Inject(PRISMA_CLIENT) private readonly prisma: PrismaClient) {}
+
   create(createClientDto: CreateClientDto) {
-    return this.clientRepository.create({
-      data: createClientDto,
-    });
+    return 
   }
 
   findAll() {
-    return this.clientRepository.findAll();
+    return this.prisma.client.findMany();
   }
 
   findOne(id: number) {
-    return this.clientRepository.findOne({ where: { id } });
+    return this.prisma.client.findUnique({ where: { id } });
   }
 
-  update(id: number, updateClientDto: UpdateClientDto) {
-    const clientExists = this.clientRepository.findOne({ where: { id } });
+  async update(id: number, updateClientDto: UpdateClientDto) {
+    const clientExists = await this.prisma.client.findUnique({ where: { id } });
     if (!clientExists) {
       throw new Error(`Client with id ${id} not found`);
     }
-    const client = this.clientRepository.update({
+    return this.prisma.client.update({
       where: { id },
       data: updateClientDto,
     });
-    return client;
   }
 
-  remove(id: number) {
-    const clientExists = this.clientRepository.findOne({ where: { id } });
+  async remove(id: number) {
+    const clientExists = await this.prisma.client.findUnique({ where: { id } });
     if (!clientExists) {
       throw new Error(`Client with id ${id} not found`);
     }
-    return this.clientRepository.delete({ where: { id } });
+    return this.prisma.client.delete({ where: { id } });
   }
 }

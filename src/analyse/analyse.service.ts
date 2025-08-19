@@ -1,39 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateAnalyseDto } from './dto/create-analyse.dto';
 import { UpdateAnalyseDto } from './dto/update-analyse.dto';
 import { PrismaClient } from '@prisma/client';
+import { PRISMA_CLIENT } from 'src/prisma.module';
 
 @Injectable()
 export class AnalyseService {
-  constructor(private readonly clientRepository: PrismaClient) {}
+  constructor(@Inject(PRISMA_CLIENT) private readonly clientRepository: PrismaClient) {}
   create(createAnalyseDto: CreateAnalyseDto) {
-    return  this.clientRepository.create({
-      data: createAnalyseDto,
-    });
+    return 
   }
 
   findAll() {
-    return this.clientRepository.findMany({
-      where: { type: 'analyse' },
-    });
+    return this.clientRepository.client.findMany();
   }
 
   findOne(id: number) {
-    return  this.clientRepository.findUnique({
-      where: { id },
-    });
+    return  
   }
 
   update(id: number, updateAnalyseDto: UpdateAnalyseDto) {
-    return this.clientRepository.update({
-      where: { id },
-      data: updateAnalyseDto,
-    });
+    return
   }
 
   remove(id: number) {
-    return this.clientRepository.delete({
-      where: { id },
-    });;
+    return 
   }
 }

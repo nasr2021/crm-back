@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+import { PRISMA_CLIENT } from './prisma.module';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!';
-  }
+  constructor(
+    @Inject(PRISMA_CLIENT) private readonly prisma: PrismaClient,
+  ) {}
 }
