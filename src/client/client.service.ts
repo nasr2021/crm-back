@@ -10,7 +10,9 @@ export class ClientService {
   constructor(@Inject(PRISMA_CLIENT) private readonly prisma: PrismaClient) {}
 
   create(createClientDto: CreateClientDto) {
-    return 
+
+    console.log('Creating client with data:', createClientDto);
+    return this.prisma.client.create({ data: createClientDto });
   }
 
   findAll() {
@@ -34,6 +36,7 @@ export class ClientService {
 
   async remove(id: number) {
     const clientExists = await this.prisma.client.findUnique({ where: { id } });
+    console.log('Removing client with id:', id);
     if (!clientExists) {
       throw new Error(`Client with id ${id} not found`);
     }
